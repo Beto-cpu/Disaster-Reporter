@@ -9,6 +9,52 @@ export default function Home() {
     ssr: false
   });
 
+  const [isModelLoading, setIsModelLoading] = useState(false)
+    const [model, setModel] = useState(null)
+    const [imageURL, setImageURL] = useState(null);
+    const [results, setResults] = useState([])
+
+    const imageRef = useRef()
+    const textInputRef = useRef()
+    const fileInputRef = useRef()
+
+    const loadModel = async () => {
+        setIsModelLoading(true)
+        try {
+            const model = await mobilenet.load()
+            setModel(model)
+            setIsModelLoading(false)
+        } catch (error) {
+            console.log(error)
+            setIsModelLoading(false)
+        }
+    }
+
+    const uploadImage = (e) => {
+        const { files } = e.target
+        if (files.length > 0) {
+            const url = URL.createObjectURL(files[0])
+            setImageURL(url)
+        } else {
+            setImageURL(null)
+        }
+        triggerUpload();
+    }
+
+    const identify = async () => {
+        textInputRef.current.value = ''
+        const results = await model.classify(imageRef.current);
+        setResults(results);
+    }
+
+    const triggerUpload = () => {
+        fileInputRef.current.click();
+    }
+
+    useEffect(() => {
+        loadModel()
+    }, [])
+
   return (
     <div className="flex flex-col items-center min-h-screen justify-between">
       <Head>
@@ -169,7 +215,7 @@ export default function Home() {
                   <div className="flex text-sm text-gray-600">
                     <label htmlFor="event-images" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                       <span>Upload a file</span>
-                      <input id="event-images" name="event-images" type="file" className="sr-only" onChange={(e)=>{console.log(e.target.value)}}/>
+                      <input id="event-images" name="event-images" type="file" className="sr-only" onChange={(e)=>{uploadImage}}/>
                     </label>
                     <p className="pl-1">or drag and drop</p>
                   </div>
@@ -182,7 +228,7 @@ export default function Home() {
 
           </fieldset>
 
-          <button type="submit" className="bg-natural-green hover:bg-suspicious-yellow py-2 px-5 border border-black font-semibold">Enviar</button>
+          <button type="submit" onClick={()=>{identify}} className="bg-natural-green hover:bg-suspicious-yellow py-2 px-5 border border-black font-semibold">Enviar</button>
 
         </form>
       </main>
