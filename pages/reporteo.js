@@ -13,7 +13,7 @@ export default function Home() {
 
       <Navbar/>
 
-      <main className="my-16 flex flex-col md:flex-row items-center justify-between mx-4 w-full max-w-7xl space-x-5">
+      {/* <main className="my-16 flex flex-row items-center justify-between mx-4 w-full max-w-7xl space-x-5">
         <div className="mx-6">
           <img src="/assets/fire.jpg"/>
         </div>
@@ -22,7 +22,7 @@ export default function Home() {
           <p className="text-2xl">En México, todos los ciudadanos tenemos el derecho presentar denuncias ante las autoridades sobre hechos, actos u omisiones que produzcan o puedan producir desequilibrio ecológico o daños al ambiente o a los recursos naturales.</p>
           <Link href="/denuncia"><a className="text-2xl text-natural-green underline font-bold hover:text-suspicious-yellow">Empezar</a></Link>
         </div>
-      </main>
+      </main> */}
 
       <Footer/>
 
